@@ -1,0 +1,3 @@
+[submodule "extern/text-powertools"]
+	path = extern/text-powertools
+	url = https://github.com/volatusveritas/text-powertools.git
