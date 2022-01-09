@@ -4,16 +4,17 @@
 
 #include "context.hpp"
 #include "cstr.hpp"
+#include "error.hpp"
 
 
-Context context {};
+static Context context {};
 
 
 void
 helpExternal()
 {
     std::cout <<
-    "-h, --help -- this help message\n"
+    "-h, --help -- display this help message\n"
     "-f <path>, --file <path> -- specify initial file path\n";
 
     std::exit(EXIT_SUCCESS);
@@ -21,56 +22,67 @@ helpExternal()
 
 
 void
-consumeArgs(int argc, char *argv[])
+openDescFile(const char *filename)
 {
-    while (argc > 0)
+    context.descFile.open(filename);
+    if (!context.descFile.is_open())
     {
-        if (argv[0][0] == '-' && std::strlen(argv[0]) > 1)
+        issueError(ErrorCode::FILE_READ_FAILURE, filename);
+    }
+}
+
+
+void
+consumeArgs(int argCount, char *argValues[])
+{
+    while (argCount > 0)
+    {
+        if (argValues[0][0] == '-' && std::strlen(argValues[0]) > 1)
         {
-            argv[0]++;
+            argValues[0]++;
 
-            if (cstrEquals(argv[0], "h") || cstrEquals(argv[0], "-help"))
-                helpExternal();
-            else if (cstrEquals(argv[0], "f") || cstrEquals(argv[0], "-file"))
-            {
-                if (argc < 2)
+            if (
+                cstrEquals(argValues[0], "h")
+                || cstrEquals(argValues[0], "-help")
+            ) helpExternal();
+            else if (
+                cstrEquals(argValues[0], "f")
+                || cstrEquals(argValues[0], "-file")
+            ) {
+                if (argCount >= 2)
                 {
-                    std::cout << "Insufficient arguments.\n";
-                    std::exit(EXIT_FAILURE);
+                    openDescFile(argValues[1]);
+                    argCount--; argValues++;
                 }
 
-                context.descFile.open(argv[1]);
-                if (!context.descFile.is_open())
-                {
-                    std::cout <<
-                        "Failed to open or read file '" << argv[1] << "'.\n";
-                    std::exit(EXIT_FAILURE);
-                }
-
-                argc--; argv++;
+                else issueError(ErrorCode::INSUFFICIENT_ARGUMENTS);
             }
             else
             {
-                std::cout << "Invalid option '" << argv[0] << "'.\n";
-                std::exit(EXIT_FAILURE);
+                if (argValues[0][0] == '-')
+                {
+                    argValues[0]++;
+
+                    if (argValues[0][0] == '\0')
+                        issueError(ErrorCode::INVALID_ARGUMENT, "--");
+                }
+
+                issueError(ErrorCode::UNKNOWN_OPTION, argValues[0]);
             }
         }
-        else
-        {
-            std::cout << "Invalid argument '" << argv[0] << "'.\n";
-            std::exit(EXIT_FAILURE);
-        }
 
-        argc--; argv++;
+        else issueError(ErrorCode::INVALID_ARGUMENT, argValues[0]);
+
+        argCount--; argValues++;
     }
 }
 
 
 int
-main(int argc, char *argv[])
+main(int argCount, char *argValues[])
 {
-    argc--; argv++;
-    if (argc > 0) consumeArgs(argc, argv);
+    argCount--; argValues++;
+    if (argCount > 0) consumeArgs(argCount, argValues);
 
     return EXIT_SUCCESS;
 }
