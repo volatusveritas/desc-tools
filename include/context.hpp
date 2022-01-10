@@ -4,8 +4,16 @@
 #include <fstream>
 
 
+enum class ViewMode
+{
+    NORMAL,
+    EXPLORE,
+};
+
+
 struct Context
 {
+    ViewMode viewMode {ViewMode::NORMAL};
     std::ifstream descFile;
 };
 
