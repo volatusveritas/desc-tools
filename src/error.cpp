@@ -20,11 +20,6 @@ issueError(ErrorCode e, const char *details)
             std::cout << "Invalid argument '" << details << "'.\n";
         } break;
 
-        case ErrorCode::UNKNOWN_OPTION:
-        {
-            std::cout << "Unknown option '" << details << "'.\n";
-        } break;
-
         case ErrorCode::FILE_READ_FAILURE:
         {
             std::cout << "Faild to open or read file '" << details << "'.\n";

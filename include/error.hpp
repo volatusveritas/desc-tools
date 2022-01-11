@@ -6,7 +6,6 @@ enum class ErrorCode
     // Command Line Arguments
     INSUFFICIENT_ARGUMENTS,
     INVALID_ARGUMENT,
-    UNKNOWN_OPTION,
 
     // File I/O
     FILE_READ_FAILURE,
