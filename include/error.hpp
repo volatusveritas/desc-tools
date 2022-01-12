@@ -14,4 +14,4 @@ enum class ErrorCode
 
 void issueError(ErrorCode e, const char *details = "");
 
-#endif
+#endif  // DESCTOOLS_ERROR_HPP_

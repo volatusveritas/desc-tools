@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 
+#include "alias.hpp"
 #include "context.hpp"
 #include "cstr.hpp"
 #include "error.hpp"
@@ -41,13 +42,12 @@ consumeArgs(int argCount, char *argValues[])
         issueError(ErrorCode::INVALID_ARGUMENT, argValues[0]);
     }
 
-    if (cstrEquals(argValues[0], "-h") || cstrEquals(argValues[0], "--help"))
+    if (validateAlias(argValues[0], Aliases::External::HELP))
     {
         helpExternal();
     }
-    else if (
-        cstrEquals(argValues[0], "-f") || cstrEquals(argValues[0], "--file")
-    ){
+    else if (validateAlias(argValues[0], Aliases::External::FILE))
+    {
         if (argCount >= 2)
         {
             openDescFile(argValues[1]);

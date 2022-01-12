@@ -17,4 +17,4 @@ struct Context
     std::ifstream descFile;
 };
 
-#endif
+#endif  // DESCTOOLS_CONTEXT_HPP_
