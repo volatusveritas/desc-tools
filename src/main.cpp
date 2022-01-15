@@ -6,6 +6,7 @@
 #include "context.hpp"
 #include "cstr.hpp"
 #include "error.hpp"
+#include "help_messages.hpp"
 
 
 static Context context {};
@@ -14,10 +15,7 @@ static Context context {};
 void
 helpExternal()
 {
-    std::cout <<
-    "-h, -hp, --help -- display this help message\n"
-    "-f, -fl, --file <path> -- specify initial file path\n";
-
+    std::cout << HelpMessages::NORMAL;
     std::exit(EXIT_SUCCESS);
 }
 
