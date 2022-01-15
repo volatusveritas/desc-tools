@@ -15,8 +15,8 @@ void
 helpExternal()
 {
     std::cout <<
-    "-h, --help -- display this help message\n"
-    "-f <path>, --file <path> -- specify initial file path\n";
+    "-h, -hp, --help -- display this help message\n"
+    "-f, -fl, --file <path> -- specify initial file path\n";
 
     std::exit(EXIT_SUCCESS);
 }
