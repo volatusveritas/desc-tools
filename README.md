@@ -1,16 +1,16 @@
 # Desclang
 
-The term “Desclang” is a shorthand for “Description Language”. This simple
+The term "Desclang" is a shorthand for "Description Language". This simple
 syntax concept aims to keep a balance between clarity and completeness. A
 Desclang file, by convention, carries the extension `.desc` as to differentiate
 it from other filetypes. A file carrying the extension `.desc` is called a
-“descfile”.
+"descfile".
 
 ## Descfile
 A Descfile contains a sequence of plaintext, that may or may not be divided
 into Sections. The plaintext within each section (or along the entire file,
 given the file has no sections) may or may not be populated with Definitions. A
-descfile may also containt Comments amidst plaintext.
+Descfile may also containt Comments amidst plaintext.
 
 ## Sections
 A Section is any amount of plaintext or Definitions between a Section Header
@@ -18,7 +18,7 @@ and the next Section Header or between a Section Header and the end of the
 file.
 
 ### Section Header
-A Section Header is the keyword “Section” (case sensitive) followed by a
+A Section Header is the keyword "Section" (case sensitive) followed by a
 space and an optional Section Numerator and a space, followed by the Section
 Identifier.
 
@@ -28,7 +28,7 @@ denote subsections, and optionally suffixed by an extra dot not followed by any
 digit. Examples: `1.0.2.`; `4.2.`; `3`; `4.2`; `5.1`.
 
 #### Section Identifier
-A Section Identifier is any sequence of plaintext that follows the “Section”
+A Section Identifier is any sequence of plaintext that follows the "Section"
 keyword or the Section Numerator, and ends when two consecutive line breaks are
 found (e.g. an empty line after the text).
 
