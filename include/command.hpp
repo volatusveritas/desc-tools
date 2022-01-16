@@ -4,7 +4,7 @@
 namespace Command
 {
     void initializeCommandBuffer();
-    
+
     void destroyCommandBuffer();
 
     void getCommand();

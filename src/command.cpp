@@ -15,8 +15,12 @@
 
 namespace Command
 {
-    char *commandBuffer {nullptr};
-    char *currentArgument {nullptr};
+    using text_buffer = char *;
+
+
+    text_buffer commandBuffer {nullptr};
+    text_buffer currentArgument {nullptr};
+
     char *nextArgumentAnchor {nullptr};
 
 
@@ -37,15 +41,17 @@ namespace Command
 
 
     void
-    advanceAnchor(char *startPosition)
+    advanceAnchor(char *anchor)
     {
-        for (char *i {startPosition}; i != '\0'; i++)
+        while (anchor != '\0')
         {
-            if (*i != ' ')
+            if (*anchor != ' ')
             {
-                nextArgumentAnchor = i;
+                nextArgumentAnchor = anchor;
                 return;
             }
+
+            anchor++;
         }
 
         nextArgumentAnchor = nullptr;
