@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "alias.hpp"
+#include "command.hpp"
 #include "context.hpp"
 #include "cstr.hpp"
 #include "error.hpp"
@@ -65,17 +66,14 @@ consumeArgs(int argCount, char *argValues[])
 }
 
 
-void
-getCommand()
-{
-}
-
-
 int
 main(int argCount, char *argValues[])
 {
     argCount--; argValues++;
     while (argCount > 0) consumeArgs(argCount, argValues);
+
+    Command::initializeCommandBuffer();
+    Command::destroyCommandBuffer();
 
     return EXIT_SUCCESS;
 }

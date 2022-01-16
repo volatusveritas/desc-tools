@@ -1,7 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "command.hpp"
 
-#include <cstring>
-#include <iostream>
+#include <cstdlib>
 
 #include "textpowertools/ansi.hpp"
 
@@ -9,38 +10,79 @@
 #include "context.hpp"
 
 
-;
+#define BUF_MAX SHRT_MAX
 
 
-void
-printPrompt(const Context &context)
+namespace Command
 {
-    using namespace TextPowertools;
+    char *commandBuffer {nullptr};
+    char *currentArgument {nullptr};
+    char *nextArgumentAnchor {nullptr};
 
-    std::cout << "dtools (";
 
-    switch (context.viewMode)
+    void
+    initializeCommandBuffer()
     {
-        case ViewMode::NORMAL:
-        {
-            ansiForegroundColor(ANSI_COLOR::BRIGHT_GREEN);
-            std::cout << "Normal";
-        } break;
-
-        case ViewMode::EXPLORE:
-        {
-            ansiForegroundColor(ANSI_COLOR::BRIGHT_YELLOW);
-            std::cout << "Explore";
-        } break;
+        commandBuffer = new char[BUF_MAX];
+        currentArgument = new char[BUF_MAX];
     }
 
-    ansiResetForeground();
-    std::cout << ") $ ";
-}
+
+    void
+    destroyCommandBuffer()
+    {
+        delete[] commandBuffer;
+        delete[] currentArgument;
+    }
 
 
-void
-getCommand(const Context &context)
-{
-    printPrompt(context);
-}
+    void
+    advanceAnchor(char *startPosition)
+    {
+        for (char *i {startPosition}; i != '\0'; i++)
+        {
+            if (*i != ' ')
+            {
+                nextArgumentAnchor = i;
+                return;
+            }
+        }
+
+        nextArgumentAnchor = nullptr;
+    }
+
+
+    void
+    getCommand()
+    {
+        std::fgets(commandBuffer, BUF_MAX, stdin);
+        nextArgumentAnchor = commandBuffer;
+
+        if (*nextArgumentAnchor == ' ') advanceAnchor(nextArgumentAnchor);
+    }
+
+
+    char *
+    popArgument()
+    {
+        if (nextArgumentAnchor == nullptr) return nullptr;
+
+        char *nextArgumentEnd {std::strchr(nextArgumentAnchor, ' ')};
+        if (nextArgumentEnd != nullptr)
+        {
+            std::ptrdiff_t argumentSize {nextArgumentEnd - nextArgumentAnchor};
+
+            std::strncpy(currentArgument, nextArgumentAnchor, argumentSize);
+            currentArgument[argumentSize + 1] = '\0';
+
+            advanceAnchor(nextArgumentEnd);
+        }
+        else
+        {
+            std::strcpy(currentArgument, nextArgumentAnchor);
+            nextArgumentAnchor = nullptr;
+        }
+
+        return currentArgument;
+    }
+}  // namespace Command
