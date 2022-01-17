@@ -77,13 +77,10 @@ main(int argCount, char *argValues[])
     std::string line;
     std::getline(std::cin, line);
 
-    std::string_view ln = line;
-    std::string_view arg;
-    while (!(arg = Command::popArgument(ln)).empty())
+    for (const auto &e : Command::getArguments(line))
     {
-        std::cout << "ARG: " << arg << "\n";
+        std::cout << "ARG: " << e << "\n";
     }
-
 
     return EXIT_SUCCESS;
 }

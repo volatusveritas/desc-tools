@@ -6,7 +6,7 @@
 
 namespace Command
 {
-    std::string_view popArgument(std::string_view &ln);
+    std::vector<std::string_view> getArguments(std::string_view ln);
 }  // namespace Command
 
 #endif  // DESCTOOLS_COMMAND_HPP_

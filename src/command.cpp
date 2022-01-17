@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <utility>
 
 #include "textpowertools/ansi.hpp"
 
@@ -11,38 +12,31 @@
 
 namespace Command
 {
-    std::string_view
-    get_until(std::string_view &i, std::string_view v)
+    std::pair<std::string_view, std::string_view>
+    splitStringView(std::string_view str, char v)
     {
-        auto c = i.find_first_of(v);
-        auto ret = i.substr(0, c);
-
-        i = c == std::string_view::npos
-          ? ""
-          : i.substr(c + 1);
-
-        return ret;
+        size_t c = str.find_first_of(v);
+        return {
+            str.substr(0, c),
+            c == std::string_view::npos ? "" : str.substr(c + 1),
+        };
     }
 
-    std::string_view
-    popArgument(std::string_view &ln)
+    std::vector<std::string_view>
+    getArguments(std::string_view ln)
     {
-        while (ln.substr(0, 1) == " ")
+        std::vector<std::string_view> ret;
+        for (;;)
         {
-            ln.remove_prefix(1);
-        }
+            while (!ln.empty() && ln.front() == ' ') ln.remove_prefix(1);
+            if (ln.empty()) return ret;
 
-        if (ln.empty())
-        {
-            return "";
-        }
+            const auto [arg, nln] = ln.front() == '\"'
+                                  ? splitStringView(ln.substr(1), '\"')
+                                  : splitStringView(ln, ' ');
 
-        if (ln.front() == '\"')
-        {
-            ln.remove_prefix(1);
-            return get_until(ln, "\"");
+            ret.push_back(arg);
+            ln = nln;
         }
-
-        return get_until(ln, " ");
     }
 }  // namespace Command
