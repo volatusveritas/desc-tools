@@ -3,6 +3,7 @@
 #include "command.hpp"
 
 #include <cstdlib>
+#include <cstring>
 
 #include "textpowertools/ansi.hpp"
 
@@ -10,7 +11,7 @@
 #include "context.hpp"
 
 
-#define BUF_MAX SHRT_MAX
+#define BUF_MAX 128
 
 
 namespace Command
@@ -27,7 +28,6 @@ namespace Command
     void
     initializeCommandBuffer()
     {
-        commandBuffer = new char[BUF_MAX];
         currentArgument = new char[BUF_MAX];
     }
 
@@ -35,7 +35,11 @@ namespace Command
     void
     destroyCommandBuffer()
     {
-        delete[] commandBuffer;
+        if (commandBuffer)
+        {
+            free(commandBuffer);
+            commandBuffer = nullptr;
+        }
         delete[] currentArgument;
     }
 
@@ -61,7 +65,11 @@ namespace Command
     void
     getCommand()
     {
-        std::fgets(commandBuffer, BUF_MAX, stdin);
+        if (commandBuffer) {
+            free(commandBuffer);
+            commandBuffer = nullptr;
+        }
+        getline(&commandBuffer, 0, stdin);
         nextArgumentAnchor = commandBuffer;
 
         if (*nextArgumentAnchor == ' ') advanceAnchor(nextArgumentAnchor);
