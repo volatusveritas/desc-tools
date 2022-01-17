@@ -2,95 +2,49 @@
 
 #include "command.hpp"
 
-#include <cstdlib>
-#include <cstring>
+#include <stdexcept>
+#include <string>
+#include <string_view>
 
 #include "textpowertools/ansi.hpp"
 
 #include "alias.hpp"
 #include "context.hpp"
 
-
-#define BUF_MAX 128
-
-
 namespace Command
 {
-    char *commandBuffer {nullptr};
-    char *currentArgument {nullptr};
-    char *nextArgumentAnchor {nullptr};
-
-
-    void
-    initializeCommandBuffer()
+    std::string_view
+    get_until(std::string_view &i, std::string_view v)
     {
-        currentArgument = new char[BUF_MAX];
+        auto c = i.find_first_of(v);
+        auto ret = i.substr(0, c);
+
+        i = c == std::string_view::npos
+          ? ""
+          : i.substr(c + 1);
+
+        return ret;
     }
 
-
-    void
-    destroyCommandBuffer()
+    std::string_view
+    popArgument(std::string_view &ln)
     {
-        if (commandBuffer)
+        while (ln.substr(0, 1) == " ")
         {
-            free(commandBuffer);
-            commandBuffer = nullptr;
+            ln.remove_prefix(1);
         }
-        delete[] currentArgument;
-    }
 
-
-    void
-    advanceAnchor(char *startPosition)
-    {
-        for (char *i {startPosition}; *i != '\0'; i++)
+        if (ln.empty())
         {
-            if (*i != ' ')
-            {
-                nextArgumentAnchor = i;
-                return;
-            }
+            return "";
         }
 
-        nextArgumentAnchor = nullptr;
-    }
-
-
-    void
-    getCommand()
-    {
-        if (commandBuffer) {
-            free(commandBuffer);
-            commandBuffer = nullptr;
-        }
-        getline(&commandBuffer, 0, stdin);
-        nextArgumentAnchor = commandBuffer;
-
-        if (*nextArgumentAnchor == ' ') advanceAnchor(nextArgumentAnchor);
-    }
-
-
-    char *
-    popArgument()
-    {
-        if (nextArgumentAnchor == nullptr) return nullptr;
-
-        char *nextArgumentEnd {std::strchr(nextArgumentAnchor, ' ')};
-        if (nextArgumentEnd != nullptr)
+        if (ln.front() == '\"')
         {
-            std::ptrdiff_t argumentSize {nextArgumentEnd - nextArgumentAnchor};
-
-            std::strncpy(currentArgument, nextArgumentAnchor, argumentSize);
-            currentArgument[argumentSize + 1] = '\0';
-
-            advanceAnchor(nextArgumentEnd);
-        }
-        else
-        {
-            std::strcpy(currentArgument, nextArgumentAnchor);
-            nextArgumentAnchor = nullptr;
+            ln.remove_prefix(1);
+            return get_until(ln, "\"");
         }
 
-        return currentArgument;
+        return get_until(ln, " ");
     }
 }  // namespace Command
