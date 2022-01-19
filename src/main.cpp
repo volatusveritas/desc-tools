@@ -1,8 +1,5 @@
 #include <cstdlib>
-#include <cstring>
 #include <iostream>
-#include <iostream>
-#include <string>
 
 #include "alias.hpp"
 #include "command.hpp"
