@@ -7,7 +7,7 @@
 
 namespace Command
 {
-    std::vector<std::string_view> getArgs(std::string_view ln);
+    std::vector<std::string_view> getCmdArgs();
 }  // namespace Command
 
 #endif  // DESCTOOLS_COMMAND_HPP_

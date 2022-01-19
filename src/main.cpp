@@ -74,12 +74,9 @@ main(int argCount, char *argValues[])
     argCount--; argValues++;
     while (argCount > 0) consumeArgs(argCount, argValues);
 
-    std::string inputLine;
-    std::getline(std::cin, inputLine);
-
-    for (const auto &e : Command::getArgs(inputLine))
+    for (const auto &arg : Command::getCmdArgs())
     {
-        std::cout << "ARG: " << e << "\n";
+        std::cout << "Argument: " << arg << "\n";
     }
 
     return EXIT_SUCCESS;

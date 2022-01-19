@@ -1,13 +1,18 @@
 #include "command.hpp"
 
+#include <iostream>
+#include <string>
 #include <string_view>
 #include <vector>
 
 
 namespace Command
 {
+    std::string cmdStr;
+
+
     std::string_view
-    getArg(std::string_view &src, char delim = ' ')
+    extractArg(std::string_view &src, char delim = ' ')
     {
         std::string_view arg;
 
@@ -36,20 +41,26 @@ namespace Command
 
 
     std::vector<std::string_view>
-    getArgs(std::string_view line)
+    getCmdArgs()
     {
+        std::getline(std::cin, cmdStr);
+        std::string_view cmdView {cmdStr};
+
         std::vector<std::string_view> args;
 
-        while (!stripView(line).empty())
+        while (!stripView(cmdView).empty())
         {
-            if (line.front() == '"')
+            if (cmdView.front() == '"')
             {
-                line.remove_prefix(1);
-                if (!line.empty()) args.push_back(getArg(line, '"'));
+                cmdView.remove_prefix(1);
+                if (!cmdView.empty())
+                {
+                    args.push_back(extractArg(cmdView, '"'));
+                }
             }
             else
             {
-                args.push_back(getArg(line));
+                args.push_back(extractArg(cmdView));
             }
         }
 
