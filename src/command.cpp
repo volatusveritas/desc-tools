@@ -1,42 +1,58 @@
 #include "command.hpp"
 
-#include <stdexcept>
-#include <string>
 #include <string_view>
-#include <utility>
+#include <vector>
 
-#include "textpowertools/ansi.hpp"
-
-#include "alias.hpp"
-#include "context.hpp"
 
 namespace Command
 {
-    std::pair<std::string_view, std::string_view>
-    splitStringView(std::string_view str, char v)
+    std::string_view
+    getArg(std::string_view &src, char delim = ' ')
     {
-        size_t c = str.find_first_of(v);
-        return {
-            str.substr(0, c),
-            c == std::string_view::npos ? "" : str.substr(c + 1),
-        };
+        std::string_view arg;
+
+        auto delimPos {src.find_first_of(delim)};
+        if (delimPos != std::string_view::npos)
+        {
+            arg = src.substr(0, delimPos);
+            src.remove_prefix(delimPos + 1);
+        }
+        else
+        {
+            arg = src;
+            src = "";
+        }
+
+        return arg;
     }
 
-    std::vector<std::string_view>
-    getArguments(std::string_view ln)
+
+    std::string_view &
+    stripView(std::string_view &view)
     {
-        std::vector<std::string_view> ret;
-        for (;;)
+        while (!view.empty() && view.front() == ' ') view.remove_prefix(1);
+        return view;
+    }
+
+
+    std::vector<std::string_view>
+    getArgs(std::string_view line)
+    {
+        std::vector<std::string_view> args;
+
+        while (!stripView(line).empty())
         {
-            while (!ln.empty() && ln.front() == ' ') ln.remove_prefix(1);
-            if (ln.empty()) return ret;
-
-            const auto [arg, nln] = ln.front() == '\"'
-                                  ? splitStringView(ln.substr(1), '\"')
-                                  : splitStringView(ln, ' ');
-
-            ret.push_back(arg);
-            ln = nln;
+            if (line.front() == '"')
+            {
+                line.remove_prefix(1);
+                if (!line.empty()) args.push_back(getArg(line, '"'));
+            }
+            else
+            {
+                args.push_back(getArg(line));
+            }
         }
+
+        return args;
     }
 }  // namespace Command

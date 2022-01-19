@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <string>
 #include <iostream>
+#include <string>
 
 #include "alias.hpp"
 #include "command.hpp"
@@ -74,10 +74,10 @@ main(int argCount, char *argValues[])
     argCount--; argValues++;
     while (argCount > 0) consumeArgs(argCount, argValues);
 
-    std::string line;
-    std::getline(std::cin, line);
+    std::string inputLine;
+    std::getline(std::cin, inputLine);
 
-    for (const auto &e : Command::getArguments(line))
+    for (const auto &e : Command::getArgs(inputLine))
     {
         std::cout << "ARG: " << e << "\n";
     }
