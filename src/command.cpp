@@ -36,6 +36,7 @@ namespace Command
     stripView(std::string_view &view)
     {
         while (!view.empty() && view.front() == ' ') view.remove_prefix(1);
+
         return view;
     }
 
@@ -46,7 +47,7 @@ namespace Command
         std::getline(std::cin, cmdStr);
         std::string_view cmdView {cmdStr};
 
-        std::vector<std::string_view> args;
+        std::vector<std::string_view> argList;
 
         while (!stripView(cmdView).empty())
         {
@@ -55,15 +56,15 @@ namespace Command
                 cmdView.remove_prefix(1);
                 if (!cmdView.empty())
                 {
-                    args.push_back(extractArg(cmdView, '"'));
+                    argList.push_back(extractArg(cmdView, '"'));
                 }
             }
             else
             {
-                args.push_back(extractArg(cmdView));
+                argList.push_back(extractArg(cmdView));
             }
         }
 
-        return args;
+        return argList;
     }
 }  // namespace Command

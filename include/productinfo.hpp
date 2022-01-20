@@ -3,7 +3,7 @@
 
 namespace ProductInfo
 {
-    constexpr const char * version {"a0.5.2"};
+    constexpr const char * version {"a0.6.3"};
 }  // namespace ProductInfo
 
 #endif  // DESCTOOLS_PRODUCTINFO_HPP_

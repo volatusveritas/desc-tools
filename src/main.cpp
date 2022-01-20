@@ -4,20 +4,12 @@
 #include "alias.hpp"
 #include "command.hpp"
 #include "context.hpp"
-#include "cstr.hpp"
 #include "error.hpp"
 #include "helpmessages.hpp"
+#include "productinfo.hpp"
 
 
 static Context context {};
-
-
-void
-helpExternal()
-{
-    std::cout << HelpMessages::NORMAL;
-    std::exit(EXIT_SUCCESS);
-}
 
 
 void
@@ -33,48 +25,53 @@ openDescFile(const char *filename)
 
 
 void
-consumeArgs(int argCount, char *argValues[])
+consumeExternalArgs(int argCount, char **argValues)
 {
-    if (argValues[0][0] != '-' || argValues[0][1] == '\0')
-    {
-        issueError(ErrorCode::INVALID_ARGUMENT, argValues[0]);
-    }
+    argCount--; argValues++;
 
-    if (validateAlias(argValues[0], Aliases::External::HELP))
+    while (argCount > 0)
     {
-        helpExternal();
-    }
-    else if (validateAlias(argValues[0], Aliases::External::FILE))
-    {
-        if (argCount >= 2)
+        if (argValues[0][0] != '-' || argValues[0][1] == '\0')
         {
-            openDescFile(argValues[1]);
-            argCount--; argValues++;
+            issueError(ErrorCode::INVALID_ARGUMENT, argValues[0]);
+        }
+
+        if (validateAlias(argValues[0], Aliases::External::HELP))
+        {
+            std::cout << HelpMessages::EXTERNAL;
+            std::exit(EXIT_SUCCESS);
+        }
+        else if (validateAlias(argValues[0], Aliases::External::VERSION))
+        {
+            std::cout << "Desctools " << ProductInfo::version << '\n';
+            std::exit(EXIT_SUCCESS);
+        }
+        else if (validateAlias(argValues[0], Aliases::External::FILE))
+        {
+            if (argCount >= 2)
+            {
+                openDescFile(argValues[1]);
+                argCount--; argValues++;
+            }
+            else
+            {
+                issueError(ErrorCode::INSUFFICIENT_ARGUMENTS);
+            }
         }
         else
         {
-            issueError(ErrorCode::INSUFFICIENT_ARGUMENTS);
+            issueError(ErrorCode::INVALID_ARGUMENT, argValues[0]);
         }
-    }
-    else
-    {
-        issueError(ErrorCode::INVALID_ARGUMENT, argValues[0]);
-    }
 
-    argCount--; argValues++;
+        argCount--; argValues++;
+    }
 }
 
 
 int
 main(int argCount, char *argValues[])
 {
-    argCount--; argValues++;
-    while (argCount > 0) consumeArgs(argCount, argValues);
-
-    for (const auto &arg : Command::getCmdArgs())
-    {
-        std::cout << "Argument: " << arg << "\n";
-    }
+    consumeExternalArgs(argCount, argValues);
 
     return EXIT_SUCCESS;
 }

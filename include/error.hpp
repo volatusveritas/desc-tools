@@ -12,6 +12,6 @@ enum class ErrorCode
 };
 
 
-void issueError(ErrorCode e, const char *details = "");
+void issueError(ErrorCode err, const char *details = "");
 
 #endif  // DESCTOOLS_ERROR_HPP_

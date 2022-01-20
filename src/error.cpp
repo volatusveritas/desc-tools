@@ -5,9 +5,9 @@
 
 
 void
-issueError(ErrorCode e, const char *details)
+issueError(ErrorCode err, const char *details)
 {
-    switch (e)
+    switch (err)
     {
         case ErrorCode::INSUFFICIENT_ARGUMENTS:
         {

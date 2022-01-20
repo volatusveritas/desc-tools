@@ -1,14 +1,16 @@
 #include "alias.hpp"
-#include "cstr.hpp"
+
+#include <cstring>
 
 
 bool
 validateAlias(const char *str, Aliases::alias *aliasList)
 {
     using namespace Aliases;
-    for (alias *alias {aliasList}; *alias != ALIAS_END; alias++)
+
+    for (alias *aliasPtr {aliasList}; **aliasPtr != *ALIAS_END; aliasPtr++)
     {
-        if (cstrEquals(str, *alias)) return true;
+        if (std::strcmp(str, *aliasPtr) == 0) return true;
     }
 
     return false;

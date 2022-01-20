@@ -19,14 +19,14 @@ namespace Aliases
 
     namespace Normal
     {
-        constexpr alias HELP    [] {"h", "hp", "help",     ALIAS_END};
-        constexpr alias OPEN    [] {"o", "op", "open",     ALIAS_END};
-        constexpr alias CONTEXT [] {"c", "ct", "context",  ALIAS_END};
-        constexpr alias LIST    [] {"l", "ls", "list",     ALIAS_END};
-        constexpr alias RESET   [] {"r", "rs", "reset",    ALIAS_END};
-        constexpr alias FIND    [] {"f", "fd", "find",     ALIAS_END};
-        constexpr alias EXPLORE [] {"e", "ep", "explore",  ALIAS_END};
-        constexpr alias QUIT    [] {"q", "qt", "quit",     ALIAS_END};
+        constexpr alias HELP    [] {"h", "hp", "help",    ALIAS_END};
+        constexpr alias OPEN    [] {"o", "op", "open",    ALIAS_END};
+        constexpr alias CONTEXT [] {"c", "ct", "context", ALIAS_END};
+        constexpr alias LIST    [] {"l", "ls", "list",    ALIAS_END};
+        constexpr alias RESET   [] {"r", "rs", "reset",   ALIAS_END};
+        constexpr alias FIND    [] {"f", "fd", "find",    ALIAS_END};
+        constexpr alias EXPLORE [] {"e", "ep", "explore", ALIAS_END};
+        constexpr alias QUIT    [] {"q", "qt", "quit",    ALIAS_END};
     }  // namespace Normal
 
 
