@@ -95,28 +95,27 @@ A Compound Comment is any amount of plaintext following `c:s>` and preceeding
 To be considered a Complete Definition, the Definition Identifier must be at
 the start of the line, followed by a question mark (`?`) and a line break.
 Then, everything from the next line forward is considered part of the
-Definition, until a single line containing `<definition end>` (and nothing
-else) is found. Complete Definitions are special because they can contain other
-Definitions inside them (Subdefinitions).
+Definition, until a single line containing `<d:e>` (and nothing else) is found.
+Complete Definitions are special because they can contain other Definitions
+inside them (Subdefinitions), which are integrated as part of itself.
 
 ### Subdefinitions
 Subdefinitions (or child definitions) are Definitions that appear inside a
-Complete Definition. They work the same way Simple and Compound Definitions do,
-with one exception: their Definition Identifier must be preceeded by `s>` (the
-Subdefinition Marker).
+Complete Definition. Syntactically speaking, they work the same way Simple and
+Compound Definitions do.
 
 ### Complete Definition Example
 
 ```Desclang
-[Combat]
-A Combat is a sequence of Rounds. A s>[Round] is any a collection of Turns. A
-s>[Turn] is a sequence of Actions performed by a Character. An s>[Action] can
-be a Functional Action, a Movement Action or a Special Action. Following are
-the definitions of each action type.
-s>[Functional Action]: any action that requires significant time. It may be the
-use of a skill, the usage of a mechanism, an attack, etc.<e
-s>[Movement Action]: any action that is related to movement or interaction. It
-may be moving from a place in the battlefield to another, picking up an item or
-interacting with a simple mechaniscm (a button, a lever, etc.).<e
-<definition end>
+[Combat]?
+A Combat is a sequence of Rounds. A [Round] is any a collection of Turns. A
+[Turn] is a sequence of Actions performed by a Character. An [Action] can be a
+Functional Action, a Movement Action or a Special Action. Following are the
+definitions of each action type.  [Functional Action]: any action that requires
+significant time. It may be the use of a skill, the usage of a mechanism, an
+attack, etc.<e [Movement Action]: any action that is related to movement or
+interaction. It may be moving from a place in the battlefield to another,
+picking up an item or interacting with a simple mechaniscm (a button, a lever,
+etc.).<e
+<d:e>
 ```
